@@ -88,8 +88,31 @@ static NSString *const baseURLString = @"http://www.raywenderlich.com/demos/weat
 {
     //Step 1
     NSString *string = [NSString stringWithFormat:@"%@weather.php?format=json", baseURLString];
-    
-    
+    NSURL *url = [NSURL URLWithString:string];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+
+    //Step 2
+    AFHTTPRequestOperation *operation= [[AFHTTPRequestOperation alloc]initWithRequest:request];
+    operation.responseSerializer = [AFJSONResponseSerializer serializer];
+
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+
+        //Step 3
+
+        self.weather = (NSDictionary*)responseObject;
+        self.title = @"JSON retrieved";
+        [self.tableView reloadData];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+
+        //Step 4
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Error Retrieving title" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+
+        [alertView show];
+
+    }];
+
+    //Step 5
+    [operation start];
 }
 
 - (IBAction)plistTapped:(id)sender
