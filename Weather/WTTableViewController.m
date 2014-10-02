@@ -86,6 +86,8 @@ static NSString *const baseURLString = @"http://www.raywenderlich.com/demos/weat
 
 - (IBAction)jsonTapped:(id)sender
 {
+    //The code below downloads and parses all the data thankfully. It seems like AFNetworking is pretty easy to use. 
+
     //Step 1
     NSString *string = [NSString stringWithFormat:@"%@weather.php?format=json", baseURLString];
     NSURL *url = [NSURL URLWithString:string];
@@ -144,7 +146,20 @@ static NSString *const baseURLString = @"http://www.raywenderlich.com/demos/weat
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 0;
+    if(!self.weather)
+        return 0;
+
+    switch (section) {
+        case 0:{
+            return 1;
+        }
+        case 1:{
+            NSArray *upcomingWeather = [self.weather upcomingWeather];
+            return [upcomingWeather count];
+        }
+        default:
+            break;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
